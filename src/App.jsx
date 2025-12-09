@@ -12,9 +12,6 @@ import AppointmentPopup from "./Components/ui/AppointmentPopup";
 import ScrollToTop from "./Components/ui/ScrollToTop";
 import PageWrapper from "./Components/ui/PageWrapper";
 import ErrorBoundary from "./Components/ui/ErrorBoundary";
-import SEO from "./Components/ui/SEO";
-import { PAGE_SEO } from "./data/seoData";
-import { generateAppointmentSchema } from "./utils/seo";
 
 // Load Home page components immediately for instant render
 import Home from "./Components/pages/Home";
@@ -31,9 +28,6 @@ const Services = lazy(() => import("./Components/pages/Services"));
 const Packages = lazy(() => import("./Components/pages/Packages"));
 const Gallery = lazy(() => import("./Components/pages/Gallery"));
 const Rooms = lazy(() => import("./Components/pages/Rooms"));
-// const FounderSection = lazy(() =>
-//   import("./Components/sections/FounderSection")
-// );
 const AppointmentBooking = lazy(() =>
   import("./Components/sections/AppointmentBooking")
 );
@@ -50,8 +44,6 @@ const LoadingFallback = () => null;
 const HomePage = () => {
   return (
     <PageWrapper>
-      <SEO {...PAGE_SEO.home} />
-      {/* Load hero and about immediately */}
       <div id="home">
         <Home />
       </div>
@@ -76,13 +68,6 @@ const HomePage = () => {
 const AboutPage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.about}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "About Nalinam Clinic", url: "/about" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <AboutUs />
         <Footer />
@@ -95,13 +80,6 @@ const AboutPage = () => {
 const SpecialitiesPage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.specialities}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Specialities", url: "/specialities" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <Specialities />
         <Footer />
@@ -114,13 +92,6 @@ const SpecialitiesPage = () => {
 const ServicesPage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.services}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Services", url: "/services" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <Services />
         <Footer />
@@ -133,13 +104,6 @@ const ServicesPage = () => {
 const PackagesPage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.packages}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Packages", url: "/packages" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <Packages />
         <Footer />
@@ -152,13 +116,6 @@ const PackagesPage = () => {
 const DoctorsPageWrapper = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.doctors}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Our Doctors", url: "/doctors" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <DoctorsPage />
         <Footer />
@@ -171,14 +128,6 @@ const DoctorsPageWrapper = () => {
 const ContactPage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.contact}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Contact Us", url: "/contact" },
-        ]}
-        schema={generateAppointmentSchema()}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <Contact />
         <Footer />
@@ -191,13 +140,6 @@ const ContactPage = () => {
 const InfrastructurePage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.infrastructure}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Our Clinic", url: "/infrastructure" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <Gallery />
         <Footer />
@@ -210,13 +152,6 @@ const InfrastructurePage = () => {
 const RoomsPage = () => {
   return (
     <PageWrapper>
-      <SEO
-        {...PAGE_SEO.rooms}
-        breadcrumbs={[
-          { name: "Home", url: "/" },
-          { name: "Rooms & Facilities", url: "/rooms" },
-        ]}
-      />
       <Suspense fallback={<LoadingFallback />}>
         <Rooms />
         <Footer />
