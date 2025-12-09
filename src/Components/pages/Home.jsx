@@ -149,7 +149,7 @@ export default function Home() {
                 transition={{ delay: 0.4, duration: 0.8 }}
                 className="text-display-xl text-gray-900 text-center lg:text-left"
               >
-                Expert Dermatology,{" "}
+                Expert ,{" "}
                 <span className="text-emerald-600 relative">
                   Right in Salem
                   <motion.div
