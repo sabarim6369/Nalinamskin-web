@@ -1,0 +1,392 @@
+import { motion } from "framer-motion";
+import { useState } from "react";
+import {
+  FaMapMarkerAlt,
+  FaPhone,
+  FaEnvelope,
+  FaAmbulance,
+  FaClock,
+  FaCalendarCheck,
+  FaWhatsapp,
+  FaFacebook,
+  FaInstagram,
+  FaYoutube,
+} from "react-icons/fa";
+import { SiX } from "react-icons/si";
+import CallModal from "../ui/CallModal";
+import HeroSection from "../ui/HeroSection";
+
+const BG1 = "/assets/heroes/main-1.avif";
+const BG2 = "/assets/heroes/main-2.avif";
+const BG3 = "/assets/heroes/main-3.avif";
+const BG4 = "/assets/heroes/heroes-20250923.avif";
+
+// Helper animation presets to avoid repeating identical motion props
+const riseIn = (delay = 0, duration = 0.8) => ({
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration, delay },
+});
+
+const fadeIn = (delay = 0, duration = 0.6) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration, delay },
+});
+
+const Contact = () => {
+  // Background images array for hero section
+  const bgPhotos = [BG1, BG2, BG3, BG4];
+
+  // Function to get hero background image
+  const getHeroBgImage = () => {
+    // Use the provided WhatsApp image for Contact page hero
+    return bgPhotos[2];
+  };
+  // Contact information updated for Nalinam Clinic
+  const contactInfo = [
+    {
+      id: "clinic-line",
+      icon: FaPhone,
+      title: "Clinic Contact",
+      primary: "9790029573",
+      secondary: "",
+      action: null,
+      urgent: false,
+    },
+    {
+      id: "email",
+      icon: FaEnvelope,
+      title: "Email",
+      primary: "contact.nalinam@gmail.com",
+      secondary: "",
+      action: "mailto:contact.nalinam@gmail.com",
+      urgent: false,
+    },
+    {
+      id: "availability",
+      icon: FaClock,
+      title: "Availability",
+      primary: "Open Daily",
+      secondary: "Convenient timings",
+      action: null,
+      urgent: false,
+    },
+    {
+      id: "address",
+      icon: FaMapMarkerAlt,
+      title: "Address",
+      primary: "39, Kamaraj Colony, Omalur Main Road",
+      secondary: "Permanur, Salem - 636 007",
+      action: "https://maps.google.com/?q=39+Kamaraj+Colony+Omalur+Main+Road+Permanur+Salem+636007",
+      urgent: false,
+    },
+  ];
+
+  // Modal state for call options
+  const [callModalOpen, setCallModalOpen] = useState(false);
+
+  const handleInfoClick = (info) => {
+    if (info.id === "clinic-line") {
+      setCallModalOpen(true);
+      return;
+    }
+    if (!info.action) return;
+    try {
+      if (typeof info.action === "function") info.action();
+      else if (typeof info.action === "string") window.open(info.action);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("Contact action failed", e);
+    }
+  };
+
+  const handleQuickAction = (action) => {
+    if (action.id === "book-appointment") {
+      setCallModalOpen(true);
+      return;
+    }
+    try {
+      if (typeof action.action === "function") action.action();
+      else if (typeof action.action === "string") window.open(action.action);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn("Quick action failed", e);
+    }
+  };
+
+  const quickActions = [
+    {
+      id: "book-appointment",
+      icon: FaCalendarCheck,
+      title: "Book Appointment",
+      subtitle: "Schedule your visit",
+      action: () => window.open("tel:9790029573"),
+      color:
+        "bg-gradient-to-r from-emerald-100 to-teal-200 hover:from-emerald-200 hover:to-teal-300 text-emerald-700 hover:text-emerald-800",
+    },
+    {
+      id: "whatsapp",
+      icon: FaWhatsapp,
+      title: "WhatsApp",
+      subtitle: "Chat with us",
+      action: () => window.open("https://wa.me/919790029573?text=Hello, I would like to book an appointment at Nalinam Skin and Hair Clinic, Salem."),
+      color:
+        "bg-gradient-to-r from-green-100 to-emerald-200 hover:from-green-200 hover:to-emerald-300 text-green-700 hover:text-green-800",
+    },
+    {
+      id: "location",
+      icon: FaMapMarkerAlt,
+      title: "Get Directions",
+      subtitle: "Find us in Salem",
+      action: () => window.open("https://maps.google.com/?q=39+Kamaraj+Colony+Omalur+Main+Road+Permanur+Salem+636007"),
+      color:
+        "bg-gradient-to-r from-blue-100 to-indigo-200 hover:from-blue-200 hover:to-indigo-300 text-blue-700 hover:text-blue-800",
+    },
+  ];
+
+  const socialLinks = [
+    {
+      id: "facebook",
+      icon: FaFacebook,
+      name: "Facebook",
+      url: "https://www.facebook.com/nalinamclinic",
+      color:
+        "bg-gradient-to-r from-blue-100 to-indigo-200 hover:from-blue-200 hover:to-indigo-300 text-blue-600 hover:text-blue-700",
+    },
+    {
+      id: "instagram",
+      icon: FaInstagram,
+      name: "Instagram",
+      url: "https://www.instagram.com/nalinamclinic",
+      color:
+        "bg-gradient-to-r from-pink-100 to-purple-200 hover:from-pink-200 hover:to-purple-300 text-pink-600 hover:text-pink-700",
+    },
+    {
+      id: "youtube",
+      icon: FaYoutube,
+      name: "YouTube",
+      url: "https://www.youtube.com/@nalinamclinic",
+      color:
+        "bg-gradient-to-r from-red-100 to-rose-200 hover:from-red-200 hover:to-rose-300 text-red-600 hover:text-red-700",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50">
+      {/* Hero Section */}
+      <HeroSection
+        backgroundImage={getHeroBgImage()}
+        badge={{ icon: FaPhone, text: "Contact Us" }}
+        title="Get in Touch"
+        subtitle="We're here to provide exceptional skin, hair, and general healthcare services"
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        {/* Quick Actions */}
+        <motion.section {...riseIn(0.2, 0.8)} className="mb-12 lg:mb-16">
+          <motion.h2
+            {...fadeIn(0.3, 0.6)}
+            className="text-heading-xl text-center mb-8 sm:mb-10 lg:mb-12 text-gray-800 px-4"
+          >
+            Quick Actions
+          </motion.h2>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.4,
+              staggerChildren: 0.2,
+            }}
+          >
+            {quickActions.map((action, index) => (
+              <motion.div
+                key={action.id}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.5 + index * 0.1,
+                  type: "spring",
+                  stiffness: 100,
+                }}
+                whileHover={{
+                  scale: 1.05,
+                  y: -5,
+                  transition: { duration: 0.2 },
+                }}
+                whileTap={{ scale: 0.95 }}
+                className={`${action.color} p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-lg cursor-pointer transition-all duration-300 transform hover:shadow-xl min-h-[140px] sm:min-h-[160px] lg:min-h-[180px] flex flex-col justify-center`}
+                onClick={() => handleQuickAction(action)}
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.7 + index * 0.1, type: "spring" }}
+                  className="text-center"
+                >
+                  <action.icon className="text-3xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4 mx-auto" />
+                </motion.div>
+                <h3 className="text-heading-md text-center mb-1 sm:mb-2">
+                  {action.title}
+                </h3>
+                <p className="text-body-sm text-center opacity-90">
+                  {action.subtitle}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.section>
+
+        {/* Contact Information */}
+        <motion.section
+          {...riseIn(0.4, 0.8)}
+          className="mb-12 sm:mb-16 lg:mb-20 px-4 sm:px-6 lg:px-8"
+        >
+          <motion.h2
+            {...fadeIn(0.5, 0.6)}
+            className="text-heading-xl text-center mb-8 sm:mb-12 text-gray-800"
+          >
+            Contact Information
+          </motion.h2>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.6,
+              staggerChildren: 0.15,
+            }}
+          >
+            {contactInfo.map((info, index) => (
+              <motion.div
+                key={info.id}
+                initial={{ opacity: 0, y: 50, rotateY: -30 }}
+                animate={{ opacity: 1, y: 0, rotateY: 0 }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.7 + index * 0.1,
+                  type: "spring",
+                  stiffness: 80,
+                }}
+                whileHover={{
+                  scale: 1.05,
+                  y: -10,
+                  rotateY: 5,
+                  transition: { duration: 0.3 },
+                }}
+                className={`bg-white p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-lg border-l-4 ${
+                  info.urgent ? "border-red-400" : "border-emerald-400"
+                } hover:shadow-xl transition-all duration-300 cursor-pointer transform min-h-[200px] sm:min-h-[220px] flex flex-col justify-center`}
+                onClick={() => handleInfoClick(info)}
+              >
+                <motion.div
+                  className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 ${
+                    info.urgent
+                      ? "bg-gradient-to-r from-red-100 to-pink-100"
+                      : "bg-gradient-to-r from-emerald-100 to-teal-100"
+                  } rounded-full flex items-center justify-center mb-4 sm:mb-6 mx-auto`}
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{
+                    delay: 0.8 + index * 0.1,
+                    type: "spring",
+                    stiffness: 200,
+                  }}
+                >
+                  <info.icon
+                    className={`text-xl sm:text-2xl lg:text-3xl ${
+                      info.urgent ? "text-red-500" : "text-emerald-500"
+                    }`}
+                  />
+                </motion.div>
+                <h3 className="text-heading-md text-center mb-2 sm:mb-3 text-gray-800">
+                  {info.title}
+                </h3>
+                <p className="text-body-sm text-center font-semibold text-gray-700 mb-1 sm:mb-2">
+                  {info.primary}
+                </p>
+                <p className="text-body-sm text-center font-semibold text-gray-700 mb-1 sm:mb-2">
+                  {info.secondary}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.section>
+
+        {/* Hospital Hours removed per request */}
+
+        {/* Social Media */}
+        <motion.section
+          {...riseIn(0.8, 0.8)}
+          className="mb-12 sm:mb-16 lg:mb-20 px-4 sm:px-6 lg:px-8"
+        >
+          <motion.h2
+            {...fadeIn(0.9, 0.6)}
+            className="text-heading-xl text-center mb-8 sm:mb-12 text-gray-800"
+          >
+            Follow Us
+          </motion.h2>
+          <motion.div
+            className="flex justify-center gap-4 sm:gap-6 lg:gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 1.0,
+              staggerChildren: 0.2,
+            }}
+          >
+            {socialLinks.map((social, index) => (
+              <motion.a
+                key={social.id}
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 50, scale: 0 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.6,
+                  delay: 1.1 + index * 0.15,
+                  type: "spring",
+                  stiffness: 200,
+                }}
+                whileHover={{
+                  scale: 1.2,
+                  y: -8,
+                  rotate: 5,
+                  transition: { duration: 0.2 },
+                }}
+                whileTap={{ scale: 0.9 }}
+                className={`${social.color} p-3 sm:p-4 lg:p-5 rounded-full shadow-lg transition-all duration-300 transform hover:shadow-xl min-w-[48px] min-h-[48px] sm:min-w-[56px] sm:min-h-[56px] lg:min-w-[64px] lg:min-h-[64px] flex items-center justify-center`}
+              >
+                <motion.div
+                  initial={{ rotate: -180 }}
+                  animate={{ rotate: 0 }}
+                  transition={{ delay: 1.2 + index * 0.15, duration: 0.5 }}
+                >
+                  <social.icon className="text-lg sm:text-xl lg:text-2xl" />
+                </motion.div>
+              </motion.a>
+            ))}
+          </motion.div>
+        </motion.section>
+
+        {/* Call Modal */}
+        <CallModal
+          isOpen={callModalOpen}
+          onClose={() => setCallModalOpen(false)}
+          title="Contact Nalinam Clinic"
+          primaryNumber="9790029573"
+          secondaryNumber="+91 9790029573"
+          whatsappNumber="+91 9790029573"
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Contact;

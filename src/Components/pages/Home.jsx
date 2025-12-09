@@ -1,0 +1,318 @@
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  FaAward,
+  FaStethoscope,
+  FaHeartbeat,
+  FaUserMd,
+  FaHospital,
+  FaMicroscope,
+  FaCalendarAlt,
+  FaShieldAlt,
+  FaHandHoldingMedical,
+  FaClinicMedical,
+  FaCut,
+  FaSpa,
+} from "react-icons/fa";
+const hospitalImg = "/assets/other/clinic.jpg";
+import PropTypes from "prop-types";
+
+// Small counter component that animates from 0 -> end when `start` becomes true
+function Counter({
+  end = 0,
+  suffix = "",
+  start = false,
+  duration = 2000,
+  className = "text-heading-md text-gray-900",
+}) {
+  const [value, setValue] = useState(0);
+  const rafRef = useRef(null);
+  const containerRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  // Observe this counter's visibility and start counting only when visible
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.unobserve(el);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    let startTs = null;
+
+    const step = (ts) => {
+      if (!startTs) startTs = ts;
+      const progress = Math.min((ts - startTs) / duration, 1);
+      const current = Math.round(progress * end);
+      setValue(current);
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(step);
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(step);
+
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [visible, end, duration]);
+
+  return (
+    <div ref={containerRef}>
+      <p className={className}>
+        {value}
+        {suffix}
+      </p>
+    </div>
+  );
+}
+
+Counter.propTypes = {
+  end: PropTypes.number,
+  suffix: PropTypes.string,
+  start: PropTypes.bool,
+  duration: PropTypes.number,
+  className: PropTypes.string,
+};
+
+export default function Home() {
+  const indicatorsRef = useRef(null);
+  const [countersStarted, setCountersStarted] = useState(false);
+
+  useEffect(() => {
+    const el = indicatorsRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !countersStarted) {
+          setCountersStarted(true);
+        } else if (!entry.isIntersecting && countersStarted) {
+          // Reset when element goes out of view
+          setCountersStarted(false);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [countersStarted]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-gray-50 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-4 lg:left-10 w-16 h-16 lg:w-32 lg:h-32 bg-emerald-100 rounded-full opacity-20 animate-pulse"></div>
+        <div className="absolute bottom-20 right-4 lg:right-10 w-12 h-12 lg:w-24 lg:h-24 bg-teal-100 rounded-full opacity-30 animate-bounce"></div>
+        <div className="absolute top-1/2 left-1/4 w-8 h-8 lg:w-16 lg:h-16 bg-emerald-200 rounded-full opacity-10 animate-pulse"></div>
+      </div>
+
+      <div className="relative z-10 flex items-center pt-20 lg:pt-24 pb-8 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            {/* Left Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6 order-2 lg:order-1"
+            >
+              {/* Tagline */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="flex items-center gap-3 justify-center lg:justify-start"
+              >
+                <div className="w-10 h-10 lg:w-12 lg:h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                  <FaHeartbeat className="text-emerald-600 text-lg lg:text-xl heart-pulse-red" />
+                </div>
+                <span className="text-emerald-600 font-semibold text-base lg:text-lg">
+                  Your Skin & Hair Care Experts
+                </span>
+              </motion.div>
+
+              {/* Main Heading */}
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-display-xl text-gray-900 text-center lg:text-left"
+              >
+                Expert Dermatology,{" "}
+                <span className="text-emerald-600 relative">
+                  Right in Salem
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 1.2, duration: 0.8 }}
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-emerald-200 origin-left"
+                  />
+                </span>
+              </motion.h1>
+
+              {/* Description */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="text-lg lg:text-xl text-gray-600 leading-relaxed max-w-lg mx-auto lg:mx-0 px-4 lg:px-0"
+                style={{ textAlign: "justify" }}
+              >
+                Comprehensive skin, hair, and general healthcare with personalized treatment plans at Nalinam Clinic, Salem's trusted dermatology center.
+              </motion.p>
+
+              {/* Trust indicators */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="grid grid-cols-3 gap-3 sm:gap-6 max-w-md mx-auto lg:mx-0"
+                ref={indicatorsRef}
+              >
+                <div className="text-center">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <FaUserMd className="text-emerald-600 text-lg lg:text-xl" />
+                  </div>
+                  <Counter end={2} suffix="+" start={countersStarted} />
+                  <p className="text-xs lg:text-sm text-gray-600">Expert Doctors</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <FaAward className="text-emerald-600 text-lg lg:text-xl" />
+                  </div>
+                  <Counter end={4} suffix="+" start={countersStarted} />
+                  <p className="text-xs lg:text-sm text-gray-600">
+                    Specialities
+                  </p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 lg:w-12 lg:h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <FaCalendarAlt className="text-emerald-600 text-lg lg:text-xl" />
+                  </div>
+                  <p className="text-heading-md text-gray-900">Open</p>
+                  <p className="text-xs lg:text-sm text-gray-600">
+                    6 Days
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Action buttons intentionally removed per request */}
+            </motion.div>
+
+            {/* Right Content - Hospital Image with floating elements */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative order-1 lg:order-2"
+            >
+              {/* Main hospital image */}
+              <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-shadow duration-500 mx-0 sm:mx-2 lg:mx-0">
+                <img
+                  src={hospitalImg}
+                  alt="Nalinam Skin and Hair Clinic"
+                  className="w-full h-96 sm:h-[28rem] lg:h-[32rem] xl:h-[36rem] object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-black/5 to-transparent"></div>
+
+                {/* Floating stats card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.6 }}
+                  className="absolute bottom-2 left-1 lg:bottom-3 lg:left-2 bg-white/95 backdrop-blur-sm rounded-lg p-2 lg:p-3 shadow"
+                >
+                  <p className="text-emerald-600 font-semibold text-[10px] lg:text-xs">
+                    Salem's Trusted Skin Clinic
+                  </p>
+
+                  <div className="mt-1 flex items-baseline gap-2">
+                    <div className="flex-shrink-0">
+                      <Counter
+                        end={100}
+                        suffix="+"
+                        duration={2000}
+                        className="text-heading-sm text-gray-900"
+                      />
+                    </div>
+                    <div className="text-gray-900 font-semibold text-sm lg:text-sm">
+                      Satisfied Patients
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Floating medical icons */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden hidden lg:block">
+                {[
+                  { icon: FaSpa, delay: 1.5, x: 15, y: 20 },
+                  { icon: FaUserMd, delay: 1.7, x: 70, y: 15 },
+                  { icon: FaHeartbeat, delay: 1.9, x: 25, y: 60 },
+                  { icon: FaHandHoldingMedical, delay: 2.1, x: 80, y: 45 },
+                  { icon: FaCut, delay: 2.3, x: 45, y: 25 },
+                  { icon: FaClinicMedical, delay: 2.5, x: 60, y: 70 },
+                  { icon: FaCalendarAlt, delay: 2.7, x: 35, y: 80 },
+                  { icon: FaShieldAlt, delay: 2.9, x: 85, y: 75 },
+                ].map((item, i) => (
+                  <motion.div
+                    key={`floating-${
+                      item.icon && item.icon.displayName
+                        ? item.icon.displayName
+                        : "icon"
+                    }-${i}`}
+                    initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                    animate={{
+                      opacity: [0, 0.6, 0.4, 0.7],
+                      scale: [0, 1.2, 0.8, 1],
+                      rotate: [0, 360],
+                      y: [0, -10, 0, -5, 0],
+                    }}
+                    transition={{
+                      delay: item.delay,
+                      duration: 3,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut",
+                    }}
+                    className="absolute"
+                    style={{
+                      left: `${item.x}%`,
+                      top: `${item.y}%`,
+                    }}
+                  >
+                    <div className="relative">
+                      <item.icon className="text-emerald-500/70 text-lg drop-shadow-lg" />
+                      {/* Red pulse line effect through the center */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500 to-transparent h-0.5 top-1/2 -translate-y-1/2"
+                        initial={{ scaleX: 0, opacity: 0 }}
+                        animate={{ scaleX: [0, 1, 0], opacity: [0, 0.8, 0] }}
+                        transition={{
+                          delay: item.delay + 1,
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatDelay: 3,
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

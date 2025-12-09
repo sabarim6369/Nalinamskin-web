@@ -1,0 +1,74 @@
+import { motion } from "framer-motion";
+import { FaQuoteLeft } from "react-icons/fa";
+const chairmanImg = "/assets/doctors/doctor-1.avif";
+
+const ChairmanCard = () => {
+  const imageSrc = chairmanImg;
+  const name = "S.SARAVANA BHAVAN";
+  const title = "CHAIRMAN";
+  const quote = `At SSS Super Speciality Hospital, We believe in combining medical excellence with a personal touch in providing hope, care and cure. We offer medical treatment with a motherly touch - because healing begins with bonding. It is our commitment to bring the best of technology under one roof for the people of Erode and beyond.`;
+  const slideInFromLeft = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
+  };
+
+  const slideInFromRight = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
+  };
+
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.15 } },
+      }}
+      className="bg-gradient-to-tl from-emerald-50 to-white rounded-3xl shadow-2xl overflow-hidden mb-12"
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-start">
+        <motion.div
+          variants={slideInFromLeft}
+          className="py-8 px-6 sm:py-8 sm:px-8 lg:py-9 lg:pl-10 lg:pr-3 order-2 lg:order-1 flex flex-col items-center lg:items-start text-center lg:text-left mx-auto lg:mx-0 max-w-lg lg:max-w-none"
+        >
+          <div className="flex items-center gap-3 mb-6 justify-center lg:justify-start">
+            <FaQuoteLeft className="text-3xl text-teal-600" />
+            <span className="text-teal-600 font-semibold text-lg">
+              Chairman’s Message
+            </span>
+          </div>
+
+          <h2 className="text-heading-xl text-gray-900 mb-4 text-center lg:text-left">
+            {name}
+          </h2>
+          <p className="text-teal-600 font-semibold text-base sm:text-lg mb-6 text-center lg:text-left">
+            {title}
+          </p>
+
+          <blockquote className="text-gray-700 text-base sm:text-lg leading-7 italic text-justify mx-auto lg:mx-0">
+            {quote}
+          </blockquote>
+        </motion.div>
+
+        <motion.div
+          variants={slideInFromRight}
+          className="relative py-8 px-6 sm:py-8 sm:px-8 lg:py-9 lg:px-10 flex justify-center items-center order-1 lg:order-2"
+        >
+          <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-tl from-emerald-300 to-teal-100 rounded-2xl transform rotate-3" />
+            <div className="absolute inset-0 bg-gradient-to-tl from-white to-emerald-50 rounded-2xl border-2 border-white shadow-md overflow-hidden">
+              <img
+                src={imageSrc}
+                alt={name}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default ChairmanCard;
